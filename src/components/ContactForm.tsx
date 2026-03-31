@@ -11,12 +11,25 @@ type FormData = {
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
 
+  let formHooks;
+  try {
+    formHooks = useForm<FormData>();
+  } catch (err: any) {
+    return (
+      <div className="card" style={{ border: '2px solid red', padding: '1rem' }}>
+        <h3 style={{ color: 'red' }}>⚠️ ContactForm Crash Detected</h3>
+        <p>Error: {err.message || "Unknown hook error"}</p>
+        <p>This usually happens due to a <strong>Duplicate React</strong> or <strong>Missing Dependency</strong> issue after merging.</p>
+      </div>
+    );
+  }
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>();
+  } = formHooks;
 
   const onSubmit = async (data: FormData) => {
     // Simulate network request
