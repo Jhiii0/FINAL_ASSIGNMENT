@@ -4,17 +4,10 @@ import ContactInfo from "../components/ContactInfo";
 import Footer from "../components/Footer";
 
 export default function Contact() {
-  const { register, handleSubmit, formState: { errors } } = useForm<ContactValues>();
-
-  const onSubmit: SubmitHandler<ContactValues> = (data) => {
-    alert("Message sent! Thanks for reaching out, " + data.sender + ".");
-  };
-
   return (
     <>
       <Navbar />
       <main id="contact-page" className="page-wrapper">
-        {/* Page Header */}
         <section className="section" style={{ paddingBottom: "0" }} aria-label="Contact page header">
           <div className="container">
             <span className="section-label">Say Hello</span>
