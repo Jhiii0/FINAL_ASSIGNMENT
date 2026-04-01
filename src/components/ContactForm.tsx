@@ -1,53 +1,138 @@
-import type { UseFormRegister, UseFormHandleSubmit, FieldErrors, SubmitHandler } from "react-hook-form";
-import type { ContactValues } from "../pages/Contact.tsx";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 
-type Props = {
-  register: UseFormRegister<ContactValues>;
-  handleSubmit: UseFormHandleSubmit<ContactValues>;
-  onSubmit: SubmitHandler<ContactValues>;
-  errors: FieldErrors<ContactValues>;
+type FormData = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
 };
 
-export default function ContactForm({ register, handleSubmit, onSubmit, errors }: Props) {
+export default function ContactForm() {
+  const [submitted, setSubmitted] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>();
+
+  const onSubmit = async (data: FormData) => {
+    // Simulate network request
+    await new Promise((res) => setTimeout(res, 1200));
+    console.log("Form submitted:", data);
+    setSubmitted(true);
+    reset();
+    setTimeout(() => setSubmitted(false), 5000);
+  };
+
   return (
-    <section className="contact-section">
-      <h2>Got an idea? Let's talk.</h2>
-      <form className="contact-form" onSubmit={handleSubmit(onSubmit)}>
+    <div className="card fade-up" id="contact-form-card">
+      <span className="section-label">Send a Message</span>
+      <h3 className="section-title" style={{ marginTop: "0.5rem", marginBottom: "1.5rem" }}>
+        Let's Talk
+      </h3>
+
+      {submitted && (
+        <div className="form-success" id="form-success-msg" role="alert">
+          ✅ Message sent successfully! I'll get back to you soon.
+        </div>
+      )}
+
+      <form
+        className="contact-form"
+        onSubmit={handleSubmit(onSubmit)}
+        id="contact-form"
+        noValidate
+      >
+        {/* Name */}
         <div className="form-group">
-          <label htmlFor="sender">Name</label>
-          <input 
-            type="text" 
-            id="sender" 
-            placeholder="Jane Doe" 
-            {...register("sender", { required: true })} 
+          <label className="form-label" htmlFor="field-name">Full Name</label>
+          <input
+            id="field-name"
+            className="form-input"
+            type="text"
+            placeholder="John Doe"
+            aria-invalid={!!errors.name}
+            {...register("name", {
+              required: "Name is required.",
+              minLength: { value: 2, message: "Name must be at least 2 characters." },
+            })}
           />
-          {errors.sender && <span className="error-text">Current Name is required.</span>}
+          {errors.name && (
+            <span className="form-error" role="alert">{errors.name.message}</span>
+          )}
         </div>
-        
+
+        {/* Email */}
         <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input 
-            type="email" 
-            id="email" 
-            placeholder="jane@example.com" 
-            {...register("email", { required: true })} 
+          <label className="form-label" htmlFor="field-email">Email Address</label>
+          <input
+            id="field-email"
+            className="form-input"
+            type="email"
+            placeholder="john@example.com"
+            aria-invalid={!!errors.email}
+            {...register("email", {
+              required: "Email is required.",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Enter a valid email address.",
+              },
+            })}
           />
-          {errors.email && <span className="error-text">A valid email is required.</span>}
+          {errors.email && (
+            <span className="form-error" role="alert">{errors.email.message}</span>
+          )}
         </div>
-        
+
+        {/* Subject */}
         <div className="form-group">
-          <label htmlFor="message">Message</label>
-          <textarea 
-            id="message" 
-            rows={4} 
-            placeholder="How can I help you?" 
-            {...register("message", { required: true })}
-          ></textarea>
-          {errors.message && <span className="error-text">Please provide a message.</span>}
+          <label className="form-label" htmlFor="field-subject">Subject</label>
+          <input
+            id="field-subject"
+            className="form-input"
+            type="text"
+            placeholder="Project Inquiry"
+            aria-invalid={!!errors.subject}
+            {...register("subject", {
+              required: "Subject is required.",
+            })}
+          />
+          {errors.subject && (
+            <span className="form-error" role="alert">{errors.subject.message}</span>
+          )}
         </div>
-        
-        <button type="submit" className="submit-button">Send Message</button>
+
+        {/* Message */}
+        <div className="form-group">
+          <label className="form-label" htmlFor="field-message">Message</label>
+          <textarea
+            id="field-message"
+            className="form-textarea"
+            placeholder="Tell me about your project..."
+            aria-invalid={!!errors.message}
+            {...register("message", {
+              required: "Message is required.",
+              minLength: { value: 20, message: "Message must be at least 20 characters." },
+            })}
+          />
+          {errors.message && (
+            <span className="form-error" role="alert">{errors.message.message}</span>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          id="contact-submit-btn"
+          className="btn btn--primary"
+          disabled={isSubmitting}
+          style={{ width: "100%", justifyContent: "center" }}
+        >
+          {isSubmitting ? "Sending..." : "📤 Send Message"}
+        </button>
       </form>
-    </section>
+    </div>
   );
 }

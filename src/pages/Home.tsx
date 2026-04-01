@@ -1,15 +1,18 @@
-import Header from "../components/Header.tsx";
-import HeroSection from "../components/HeroSection.tsx";
-import Footer from "../components/Footer.tsx";
+import Navbar from "../components/Navbar";
+import HeroSection from "../components/HeroSection";
+import FeaturedSection from "../components/FeaturedSection";
+import Footer from "../components/Footer";
 
 export default function Home() {
   return (
-    <div className="page-container fade-in">
-      <Header title="Home" />
-      <main className="content-wrap">
+    <>
+      <Navbar />
+      <main id="home-page">
         <HeroSection />
+        <div className="divider" />
+        <FeaturedSection />
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

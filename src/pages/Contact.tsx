@@ -1,10 +1,7 @@
-import Header from "../components/Header.tsx";
-import ContactForm from "../components/ContactForm.tsx";
-import Footer from "../components/Footer.tsx";
-import { useForm } from "react-hook-form";
-import type { SubmitHandler } from "react-hook-form";
-
-export type ContactValues = { sender: string; message: string; email: string };
+import Navbar from "../components/Navbar";
+import ContactForm from "../components/ContactForm";
+import ContactInfo from "../components/ContactInfo";
+import Footer from "../components/Footer";
 
 export default function Contact() {
   const { register, handleSubmit, formState: { errors } } = useForm<ContactValues>();
@@ -14,17 +11,34 @@ export default function Contact() {
   };
 
   return (
-    <div className="page-container fade-in">
-      <Header title="Contact Me" />
-      <main className="content-wrap">
-        <ContactForm 
-          register={register} 
-          handleSubmit={handleSubmit} 
-          onSubmit={onSubmit} 
-          errors={errors} 
-        />
+    <>
+      <Navbar />
+      <main id="contact-page" className="page-wrapper">
+        {/* Page Header */}
+        <section className="section" style={{ paddingBottom: "0" }} aria-label="Contact page header">
+          <div className="container">
+            <span className="section-label">Say Hello</span>
+            <h1 className="fade-up" style={{ color: "var(--text-primary)" }}>
+              Contact{" "}
+              <span style={{ background: "var(--gradient-accent)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                Me
+              </span>
+            </h1>
+          </div>
+        </section>
+
+        <div className="divider" style={{ marginTop: "2rem" }} />
+
+        <section className="section" aria-label="Contact details and form">
+          <div className="container">
+            <div className="grid-2">
+              <ContactInfo />
+              <ContactForm />
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 }
