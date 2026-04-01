@@ -4,6 +4,12 @@ import ContactInfo from "../components/ContactInfo";
 import Footer from "../components/Footer";
 
 export default function Contact() {
+  const { register, handleSubmit, formState: { errors } } = useForm<ContactValues>();
+
+  const onSubmit: SubmitHandler<ContactValues> = (data) => {
+    alert("Message sent! Thanks for reaching out, " + data.sender + ".");
+  };
+
   return (
     <>
       <Navbar />
