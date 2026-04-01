@@ -52,3 +52,22 @@
   background-color: var(--accent);
   box-shadow: 0 4px 14px 0 var(--accent-border);
 }
+
+.theme-toggle {
+  background: var(--accent-bg);
+  color: var(--text-h);
+  border: 1px solid var(--accent-border);
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-weight: 600;
+  transition: all 0.3s;
+  position: absolute;
+  right: 40px;
+}
+
+.theme-toggle:hover {
+  background: var(--accent);
+  color: var(--bg);
+}

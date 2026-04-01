@@ -1,7 +1,20 @@
 import { NavLink } from "react-router-dom";
-import "./Navbar.css"; // We'll add some specific styling for the active state here
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
+import "./Navbar.css";
 
 export default function Navbar() {
+  const themeCtx = useContext(ThemeContext);
+
+  if (!themeCtx) return null; // Safe guard
+  const { theme, setTheme } = themeCtx;
+
+  const cycleTheme = () => {
+    if (theme === "midnight") setTheme("emerald");
+    else if (theme === "emerald") setTheme("solarized");
+    else setTheme("midnight");
+  };
+
   return (
     <nav className="navbar">
       <ul className="nav-links">
@@ -21,6 +34,9 @@ export default function Navbar() {
           </NavLink>
         </li>
       </ul>
+      <button onClick={cycleTheme} className="theme-toggle">
+        Theme: {theme.charAt(0).toUpperCase() + theme.slice(1)}
+      </button>
     </nav>
   );
 }
